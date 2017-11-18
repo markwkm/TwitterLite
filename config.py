@@ -47,11 +47,25 @@ def configure(advanced):
     from supybot.questions import expect, anything, something, yn
     conf.registerPlugin('TwitterLite', True)
 
+    consumer_key = something("consumer_key")
+    consumer_secret = something("consumer_secret")
+    access_token_key = something("access_token_key")
+    access_token_secret = something("access_token_secret")
+
+    conf.supybot.plugins.TwitterLite.consumer_key.set(consumer_key)
+    conf.supybot.plugins.TwitterLite.consumer_secret.set(consumer_secret)
+    conf.supybot.plugins.TwitterLite.access_token_key.set(access_token_key)
+    conf.supybot.plugins.TwitterLite.access_token_secret.set(access_token_secret)
 
 TwitterLite = conf.registerPlugin('TwitterLite')
-# This is where your configuration variables (if any) should go.  For example:
-# conf.registerGlobalValue(TwitterLite, 'someConfigVariableName',
-#     registry.Boolean(False, _("""Help for someConfigVariableName.""")))
 
+conf.registerGlobalValue(TwitterLite, 'consumer_key',
+        registry.String('', """Consumer key."""))
+conf.registerGlobalValue(TwitterLite, 'consumer_secret',
+        registry.String('', """Consumer secret."""))
+conf.registerGlobalValue(TwitterLite, 'access_token_key',
+        registry.String('', """Access token key."""))
+conf.registerGlobalValue(TwitterLite, 'access_token_secret',
+        registry.String('', """Access token secret."""))
 
 # vim:set shiftwidth=4 tabstop=4 expandtab textwidth=79:

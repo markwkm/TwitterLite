@@ -41,10 +41,32 @@ except ImportError:
     # without the i18n module
     _ = lambda x: x
 
+import twitter
+
 
 class TwitterLite(callbacks.Plugin):
     """Twitter plugin just to retrieve tweets by screen name."""
-    pass
+
+    def __init__(self, irc):
+        self.__parent = super(TwitterLite, self)
+        self.__parent.__init__(irc)
+        self.api = twitter.Api(consumer_key=self.registryValue('consumer_key'),
+                  consumer_secret=self.registryValue('consumer_secret'),
+                  access_token_key=self.registryValue('access_token_key'),
+                  access_token_secret=self.registryValue('access_token_secret'))
+
+    def t(self, irc, msg, args, screen_name):
+        """<screen_name>
+
+        Get the latest tweet from <screen_name>
+        """
+        try:
+            tweet = self.api.GetUserTimeline(screen_name=screen_name, count=1)
+            irc.reply(tweet[0].text, False)
+        except Exception:
+            irc.reply('Sorry, cannot get tweet from %s.' % screen_name)
+
+    t = wrap(t, ['text'])
 
 
 Class = TwitterLite
